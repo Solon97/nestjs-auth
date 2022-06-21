@@ -1,0 +1,50 @@
+version: "3.7"
+
+services:
+  backend:
+    container_name: myapp_backend
+    restart: always
+    build: .
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql/nest_auth
+      - APP_PORT=3000
+    ports:
+      - "3000:3000"
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - redis
+  mysql: # Example Service
+    container_name: myapp_mysql
+    restart: always
+    image: mysql:latest
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=nest_auth
+      - MYSQL_DB_PORT=3306
+    ports:
+    - "${MYSQL_DB_PORT}:3306"
+    volumes:
+    - mysql_data:/var/lib/mysql
+  redis: # Example Service
+    container_name: myapp_redis
+    restart: always
+    image: redis:6.0-alpine
+    expose:
+      - "6379"
+    volumes:
+      - myapp_redis_data:/data
+
+volumes:
+  mysql_data:
+  myapp_redis_data:
+
+networks:
+  default:
+    external:
+      name: myapp
