@@ -1,50 +1,48 @@
-version: "3.7"
+version: '3.7'
 
 services:
-  backend:
-    container_name: myapp_backend
-    restart: always
-    build: .
-    environment:
-      - DATABASE_URL=mysql://root:root@mysql/nest_auth
-      - APP_PORT=3000
+  main:
+    container_name: main
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
-      - "3000:3000"
-    links:
-      - mysql
-      - redis
+      - ${SERVER_PORT}:${SERVER_PORT}
+      - 9229:9229
+    command: npm run start:dev
+    env_file:
+      - .env
+    networks:
+      - webnet
     depends_on:
-      - mysql
       - redis
-  mysql: # Example Service
-    container_name: myapp_mysql
+      - mysql
+  redis:
+    container_name: redis
+    image: redis:5
+    networks:
+      - webnet
+  db_mysql: # Example Service
+    container_name: mysql
     restart: always
     image: mysql:latest
     environment:
-      - MYSQL_HOST=mysql
-      - MYSQL_USERNAME=root
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=nest_auth
-      - MYSQL_DB_PORT=3306
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USERNAME=${MYSQL_USERNAME}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_DB_PORT=${MYSQL_DB_PORT}
     ports:
     - "${MYSQL_DB_PORT}:3306"
     volumes:
-    - mysql_data:/var/lib/mysql
-  redis: # Example Service
-    container_name: myapp_redis
-    restart: always
-    image: redis:6.0-alpine
-    expose:
-      - "6379"
-    volumes:
-      - myapp_redis_data:/data
-
-volumes:
-  mysql_data:
-  myapp_redis_data:
-
+    - mysql:/var/lib/mysql
+    networks:
+      - webnet
 networks:
-  default:
-    external:
-      name: myapp
+  webnet:
+volumes:
+  mysql:

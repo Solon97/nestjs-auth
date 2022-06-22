@@ -1,16 +1,29 @@
-FROM node:lts-alpine
+FROM node:lts-alpine As development
 
-# Create app directory
-WORKDIR /var/www/backend
+WORKDIR /usr/src/app
 
-# Install app dependencies - For NPM use: `COPY package.json package-lock.lock ./`
-COPY . ./ 
-# For NPM use: `RUN npm ci`
-RUN npm ci
+COPY package*.json ./
+COPY prisma ./prisma/
 
-# Add storage folder to the container (If you want to add other folder contents to the container)
-# ADD storage /var/www/backend/storage
+RUN npm install
 
-# Entrypoint command - Replace `"yarn"` with `"npm", "run"` if you are using NPM as your package manager.
-# You can update this to run other NodeJS apps
-CMD [ "npm", "run", "start:dev", "--preserveWatchOutput" ]
+COPY . .
+
+RUN npm run build
+
+FROM node:lts-alpine as production
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install --only=production
+
+COPY . .
+
+COPY --from=development /usr/src/app/dist ./dist
+
+CMD ["node", "dist/main"]
