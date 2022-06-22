@@ -39,7 +39,7 @@ services:
     ports:
     - "${MYSQL_DB_PORT}:3306"
     volumes:
-    - mysql:/var/lib/mysql
+    - ./db:/var/lib/mysql
     networks:
       - webnet
 networks:
