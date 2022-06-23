@@ -4,9 +4,9 @@ import { AuthGuard } from '@nestjs/passport';
 import { of } from 'rxjs';
 import { map, mergeMap, takeWhile, tap } from 'rxjs/operators';
 import { UserService } from '../../user/user.service';
-import { AuthRequest } from './interfaces/AuthRequest';
-import { UserFromJwt } from './interfaces/UserFromJwt';
-import { IS_PUBLIC_KEY } from './public.decorator';
+import { AuthRequest } from '../types/AuthRequest';
+import { UserFromJwt } from '../types/UserFromJwt';
+import { IS_PUBLIC_KEY } from '../types/decorators/public.decorator';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -18,6 +18,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   canActivate(context: ExecutionContext) {
+    // Se a rota for pública
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),

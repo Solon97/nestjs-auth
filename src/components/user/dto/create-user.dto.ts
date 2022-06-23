@@ -15,4 +15,6 @@ export class CreateUserDto implements User {
       message: 'password too weak'
     })
       password: string
+
+      isAdmin: boolean
 }

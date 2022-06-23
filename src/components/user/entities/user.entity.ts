@@ -5,6 +5,7 @@ export class User implements Prisma.UserUncheckedCreateInput {
   email: string
   password: string
   name: string
+  isAdmin: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
 }
