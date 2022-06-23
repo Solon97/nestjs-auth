@@ -1,0 +1,13 @@
+# Configuration
+
+SERVER_PORT=3000
+APP_ENV=development
+JWT_SECRET=""
+# Database
+DATABASE_URL="mysql://root:root@mysql/nest_auth"
+MYSQL_HOST=mysql
+MYSQL_USERNAME=root
+MYSQL_PASSWORD=root
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=nest_auth
+MYSQL_DB_PORT=3306
