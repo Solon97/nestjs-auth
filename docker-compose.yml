@@ -12,7 +12,7 @@ services:
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
-    command: npm run start:dev
+    entrypoint: npm run start:dev
     env_file:
       - .env
     networks:
@@ -25,7 +25,7 @@ services:
     image: redis:5
     networks:
       - webnet
-  db_mysql: # Example Service
+  mysql:
     container_name: mysql
     restart: always
     image: mysql:latest
