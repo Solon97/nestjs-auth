@@ -1,0 +1,23 @@
+_id: req_f59ad83e7b4d41858857634f27cfb797
+type: Request
+parentId: wrk_fa2b592e5a634a149762c8e739a96446
+modified: 1730123344804
+created: 1730123329071
+url: google.com
+name: Teste
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: insomnia/2023.5.8
+authentication: {}
+metaSortKey: -1730123329071
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
